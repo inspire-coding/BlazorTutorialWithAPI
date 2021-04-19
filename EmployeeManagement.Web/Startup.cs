@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace EmployeeManagement.Web
 {
@@ -24,7 +25,11 @@ namespace EmployeeManagement.Web
             services.AddServerSideBlazor();
             services.AddHttpClient<IEmployeeService, EmployeeService>(client =>
             {
-                client.BaseAddress = new System.Uri("https://localhost:44321/");
+                client.BaseAddress = new Uri("https://localhost:44321/");
+            });
+            services.AddHttpClient<IDepartmentService, DepartmentService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:44321/");
             });
         }
 
