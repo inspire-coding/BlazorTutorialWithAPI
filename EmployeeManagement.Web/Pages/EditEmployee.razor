@@ -1,17 +1,21 @@
 ﻿@page "/editemployee/{id}"
+@page "/editemployee"
 
 @inherits EditEmployeeBase
 
-<EditForm Model="@Employee">
-    <h3>Edit Employee</h3>
+<EditForm Model="@EditEmployeeModel" OnValidSubmit="HandleValidSubmit">
+    <ObjectGraphDataAnnotationsValidator />
+    <h3>@PageHeaderText</h3>
     <hr />
+    <ValidationSummary />
     <div class="form-group row">
         <label for="firstName" class="col-sm-2 col-form-label">
             First Name
         </label>
         <div class="col-sm-10">
             <InputText id="firstName" class="form-control" placeholder="First Name"
-                       @bind-Value="Employee.FirstName" />
+                       @bind-Value="EditEmployeeModel.FirstName" />
+            <ValidationMessage For="@(() => EditEmployeeModel.FirstName)" />
         </div>
     </div>
     <div class="form-group row">
@@ -20,7 +24,8 @@
         </label>
         <div class="col-sm-10">
             <InputText id="lastName" class="form-control" placeholder="Last Name"
-                       @bind-Value="Employee.LastName" />
+                       @bind-Value="EditEmployeeModel.LastName" />
+            <ValidationMessage For="@(() => EditEmployeeModel.LastName)" />
         </div>
     </div>
     <div class="form-group row">
@@ -29,7 +34,18 @@
         </label>
         <div class="col-sm-10">
             <InputText id="email" class="form-control" placeholder="Email"
-                       @bind-Value="Employee.Email" />
+                       @bind-Value="EditEmployeeModel.Email" />
+            <ValidationMessage For="@(() => EditEmployeeModel.Email)" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="confirmEmail" class="col-sm-2 col-form-label">
+            Confirm Email
+        </label>
+        <div class="col-sm-10">
+            <InputText id="confirmEmail" class="form-control"
+                       @bind-Value="EditEmployeeModel.ConfirmEmail" />
+            <ValidationMessage For="@(() => EditEmployeeModel.ConfirmEmail)" />
         </div>
     </div>
     <div class="form-group row">
@@ -37,12 +53,52 @@
             Department
         </label>
         <div class="col-sm-10">
-            <InputSelect id="department" @bind-Value="DepartmentId" class="form-control">
+            <CustomInputSelect @bind-Value="EditEmployeeModel.DepartmentId" class="form-control">
                 @foreach (var dept in Departments)
                 {
                     <option value="@dept.DepartmentId">@dept.DepartmentName</option>
                 }
+            </CustomInputSelect>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label for="gender" class="col-sm-2 col-form-label">
+            Gender
+        </label>
+        <div class="col-sm-10">
+            <InputSelect @bind-Value="EditEmployeeModel.Gender" class="form-control">
+                @foreach (var gender in Enum.GetValues(typeof(Gender)))
+                {
+                    <option value="@gender">@gender</option>
+                }
             </InputSelect>
         </div>
     </div>
+    <div class="form-group row">
+        <label for="dateOfBirth" class="col-sm-2 col-form-label">
+            Date Of Birth
+        </label>
+        <div class="col-sm-10">
+            <InputDate @bind-Value="EditEmployeeModel.DateOfBirth" class="form-control" />
+        </div>
+    </div>
+    @*<div class="form-group row">
+            Updating Department Name from this page does not make sense
+            This is only here to demonstrate complex model validation
+            <label for="deptName" class="col-sm-2 col-form-label">
+                Department Name
+            </label>
+            <div id="deptName" class="col-sm-10">
+                <InputText @bind-Value="EditEmployeeModel.Department.DepartmentName"
+                           class="form-control" />
+                <ValidationMessage For="@(() => EditEmployeeModel.Department.DepartmentName)" />
+            </div>
+        </div>*@
+
+    <button class="btn btn-primary" type="submit">Submit</button>
+    @if (EditEmployeeModel.EmployeeId > 0)
+    {
+        <button class="btn btn-danger m-3" type="button" @onclick="Delete_Click">Delete</button>
+    }
+
 </EditForm>

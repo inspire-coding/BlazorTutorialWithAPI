@@ -88,7 +88,7 @@ namespace EmployeeManagement.Api.Controllers
                     return BadRequest();
                 }
 
-                var emp = _employeeRepository.GetEmployeeByEmail(employee.Email);
+                var emp = await _employeeRepository.GetEmployeeByEmail(employee.Email);
                 if (emp is not null)
                 {
                     ModelState.AddModelError("email", "Employee email already in use");
@@ -113,29 +113,23 @@ namespace EmployeeManagement.Api.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult<Employee>> UpdateEmployee(int id, Employee employee)
+        [HttpPut()]
+        public async Task<ActionResult<Employee>> UpdateEmployee(Employee employee)
         {
             try
             {
-                if (id != employee.EmployeeId)
-                {
-                    return BadRequest("Employee Id mismatch");
-                }
-
-                var employeeToUpdate = await _employeeRepository.GetEmployee(id);
+                var employeeToUpdate = await _employeeRepository.GetEmployee(employee.EmployeeId);
 
                 if (employeeToUpdate == null)
                 {
-                    return NotFound($"Employee with Id = {id} not found");
+                    return NotFound($"Employee with Id = {employee.EmployeeId} not found");
                 }
 
                 return await _employeeRepository.UpdateEmployee(employee);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
+                return StatusCode(StatusCodes.Status500InternalServerError,
                     "Error updating data");
             }
         }
