@@ -81,12 +81,22 @@ namespace EmployeeManagement.Web.Pages
             }
         }
 
+        public Components.ConfirmBase DeleteConfirmation { get; set; }
+
         protected async Task Delete_Click()
         {
-            await EmployeeService.DeleteEmployee(Employee.EmployeeId);
-            NavigationManager.NavigateTo("/");
+            DeleteConfirmation.Show();
+            //await EmployeeService.DeleteEmployee(Employee.EmployeeId);
+            //NavigationManager.NavigateTo("/");
         }
 
-
+        protected async Task ConfirmDelete_Click(bool deleteConfirmed)
+        {
+            if (deleteConfirmed)
+            {
+                await EmployeeService.DeleteEmployee(Employee.EmployeeId);
+                NavigationManager.NavigateTo("/");
+            }
+        }
     }
 }
