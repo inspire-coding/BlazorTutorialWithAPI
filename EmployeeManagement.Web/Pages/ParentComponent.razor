@@ -1,0 +1,16 @@
+﻿@page "/pc"
+
+<ChildComponent InputAttributes="attributesFromParent" Value="Parent Value">
+</ChildComponent>
+
+@code {
+    [Parameter]
+    public Dictionary<string, object> attributesFromParent { get; set; } =
+        new Dictionary<string, object>()
+        {
+            { "required", "required" },
+            { "placeholder", "Parent Component Placeholder" },
+            { "size", "50" },
+            { "maxlength", "5" }
+            };
+}
